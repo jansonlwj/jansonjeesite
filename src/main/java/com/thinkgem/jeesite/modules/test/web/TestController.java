@@ -105,6 +105,7 @@ public class TestController extends BaseController {
 		if (!beanValidator(model, test)){
 			return form(test, model);
 		}
+		
 //		testService.save(test);
 		addMessage(redirectAttributes, "保存测试'" + test.getName() + "'成功");
 		return "redirect:" + adminPath + "/test/test/?repage";
