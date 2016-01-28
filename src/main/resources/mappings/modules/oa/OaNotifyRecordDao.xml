@@ -65,7 +65,7 @@
 		)
 	</insert>
 	
-	<insert id="insertAll" parameterType="List">
+		<insert id="insertAll" parameterType="List">
 		INSERT INTO OA_NOTIFY_RECORD(
 			ID,
 			OA_NOTIFY_ID,
@@ -73,17 +73,24 @@
 			READ_FLAG,
 			READ_DATE
 		)
-		<foreach collection="list" item="e" separator=" UNION ALL ">
-			SELECT
-				#{e.id},
-				#{e.oaNotify.id},
-				#{e.user.id},
-				#{e.readFlag},
-				#{e.readDate}
-			<if test="e.dbName != 'mssql'">
-			FROM dual
-			</if>
-		</foreach>
+			select 
+				SEQ_OA_NOTIFY_RECORD.nextval,
+				t.oaNotifyId,
+				t.userId,
+				t.readFlag,
+				t.readDate 
+			from (
+				<foreach collection="list" item="e" separator=" UNION ALL ">
+					SELECT
+						#{e.oaNotify.id}  oaNotifyId,
+						#{e.user.id}  userId,
+						#{e.readFlag}  readFlag,
+						#{e.readDate}  readDate
+					<if test="e.dbName != 'mssql'">
+					FROM dual
+					</if>
+				</foreach>
+			) t
 	</insert>
 	
 	<update id="update">
